@@ -20,7 +20,6 @@ public class PermissionCotroller {
     public String createPermission(@RequestBody Map<String, Object> params) {
         Permission permission = new Permission();
         permission.setName((String) params.get("name"));
-        permission.setRoleId((Integer) params.get("roleId"));
         return permissionService.create(permission);
     }
 }

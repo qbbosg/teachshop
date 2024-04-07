@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.dao.MemberRepository;
 import plus.suja.teach.teachshop.entity.Member;
+import plus.suja.teach.teachshop.entity.Permission;
 import plus.suja.teach.teachshop.entity.Role;
 
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ public class MemberService {
             System.out.println(member.getUsername());
             System.out.print("身份：");
             System.out.println(member.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
+            System.out.print("权限：");
+            member.getRoles().forEach(role -> System.out.println(role.getPermissions().stream().map(Permission::getName).collect(Collectors.toList())));
             System.out.println("--------------");
         });
         return "all";
