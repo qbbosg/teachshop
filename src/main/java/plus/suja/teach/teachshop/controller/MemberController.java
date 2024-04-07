@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.service.MemberService;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/v1/members")
 public class MemberController {
     @Autowired
     private MemberService memberService;

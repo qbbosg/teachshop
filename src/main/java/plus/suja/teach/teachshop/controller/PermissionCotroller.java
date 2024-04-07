@@ -11,7 +11,7 @@ import plus.suja.teach.teachshop.service.PermissionService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/permissions")
+@RequestMapping("/api/v1/permissions")
 public class PermissionCotroller {
     @Autowired
     private PermissionService permissionService;
