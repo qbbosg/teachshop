@@ -1,11 +1,13 @@
 package plus.suja.teach.teachshop.service;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.dao.MemberRepository;
 import plus.suja.teach.teachshop.entity.Member;
 import plus.suja.teach.teachshop.entity.Permission;
 import plus.suja.teach.teachshop.entity.Role;
+import plus.suja.teach.teachshop.exception.HttpException;
 
 import java.util.stream.Collectors;
 
@@ -18,9 +20,16 @@ public class MemberService {
         return "login";
     }
 
-    public String register(Member member) {
-        memberRepository.save(member);
-        return "register";
+    public Member register(String username, String password) {
+        Member member = new Member();
+        member.setUsername(username);
+        member.setEncryptPassword(BCrypt.withDefaults().hashToString(12, password.toCharArray()));
+        try {
+            memberRepository.save(member);
+        } catch (Exception e) {
+            throw new HttpException(400, "用户名已经存在");
+        }
+        return member;
     }
 
     public String all() {

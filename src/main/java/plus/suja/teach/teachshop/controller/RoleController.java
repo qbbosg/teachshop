@@ -11,7 +11,7 @@ import plus.suja.teach.teachshop.service.RoleService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/api/v1/roles")
 public class RoleController {
     @Autowired
     private RoleService roleService;
