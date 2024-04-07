@@ -26,4 +26,11 @@ create table member_role (
     id serial primary key,
     member_id integer not null ,
     role_id integer not null
-)
+);
+
+create table session (
+    id serial primary key,
+    cookie varchar(50) unique not null,
+    member_id int not null
+);
+
