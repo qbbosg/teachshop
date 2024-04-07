@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import plus.suja.teach.teachshop.config.Interceptor;
-import plus.suja.teach.teachshop.entity.Member;
 import plus.suja.teach.teachshop.entity.Session;
-import plus.suja.teach.teachshop.exception.HttpException;
 import plus.suja.teach.teachshop.service.AuthService;
 
 @RestController
