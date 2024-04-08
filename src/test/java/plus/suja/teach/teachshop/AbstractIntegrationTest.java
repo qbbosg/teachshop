@@ -67,4 +67,14 @@ public class AbstractIntegrationTest {
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
+
+    HttpResponse<String> get(String path, String cookie) throws IOException, InterruptedException {
+        HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(host + ":" + getPort() + apiVersion + path));
+        if (Strings.isNotEmpty(cookie)) {
+            builder.header("Cookie", cookie);
+        }
+        HttpRequest request = builder.build();
+
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
 }
