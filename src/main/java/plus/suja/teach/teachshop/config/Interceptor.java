@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 public class Interceptor {
     @Autowired
     static SessionDao sessionDao;
+
     public static class UserContext {
         private static ThreadLocal<Member> currentUser = new ThreadLocal<>();
 

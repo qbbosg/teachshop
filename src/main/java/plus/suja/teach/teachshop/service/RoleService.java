@@ -9,6 +9,7 @@ import plus.suja.teach.teachshop.entity.Role;
 public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
+
     public String create(Role role) {
         roleRepository.save(role);
         return "create";
