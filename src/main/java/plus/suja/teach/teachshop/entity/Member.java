@@ -1,5 +1,6 @@
 package plus.suja.teach.teachshop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,10 +13,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "member")
-public class Member extends Base{
+public class Member extends Base {
     @Column(name = "username")
     private String username;
     @Column(name = "encrypt_password")
+    @JsonIgnore
     private String encryptPassword;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -4,4 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import plus.suja.teach.teachshop.entity.Member;
 
 public interface MemberRepository extends CrudRepository<Member, Integer> {
+    Member findByUsername(String username);
 }
