@@ -1,15 +1,16 @@
 package plus.suja.teach.teachshop.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.Member;
+import plus.suja.teach.teachshop.entity.Session;
 import plus.suja.teach.teachshop.exception.HttpException;
 import plus.suja.teach.teachshop.service.MemberService;
 
@@ -33,7 +34,6 @@ public class MemberController {
         if (!StringUtils.hasLength(password) || password.length() < 6 || password.length() > 20) {
             throw new HttpException(401, "密码必须6-20之间");
         }
-        response.setStatus(200);
         return memberService.login(username, password, response);
     }
 
@@ -45,7 +45,16 @@ public class MemberController {
         if (!StringUtils.hasLength(password) || password.length() < 6 || password.length() > 20) {
             throw new HttpException(401, "密码必须6-20之间");
         }
-        response.setStatus(201);
-        return memberService.register(username, password);
+        return memberService.register(username, password, response);
+    }
+
+    @GetMapping("/online")
+    public Session online(HttpServletResponse response) {
+        return memberService.online(response);
+    }
+
+    @GetMapping("/offline")
+    public void offline(HttpServletRequest request, HttpServletResponse response) {
+        memberService.offline(request, response);
     }
 }
