@@ -19,7 +19,7 @@ public class RoleController {
     @PostMapping
     public String createRole(@RequestBody Map<String, Object> params) {
         Role role = new Role();
-        role.setName((String)params.get("name"));
+        role.setName((String) params.get("name"));
         return roleService.create(role);
     }
 }

@@ -13,8 +13,9 @@ import java.util.Map;
 @ControllerAdvice
 public class ErrorHandlerController {
     ObjectMapper objectMapper = new ObjectMapper();
+
     @ExceptionHandler({HttpException.class})
-    public void handle(HttpServletResponse response, HttpException ex) throws IOException{
+    public void handle(HttpServletResponse response, HttpException ex) throws IOException {
         response.setStatus(ex.getStatusCode());
         Map<String, Object> jsonObject = new HashMap<>();
         jsonObject.put("message", ex.getMessage());

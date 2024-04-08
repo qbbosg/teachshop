@@ -1,6 +1,6 @@
 package plus.suja.teach.teachshop.exception;
 
-public class HttpException extends RuntimeException{
+public class HttpException extends RuntimeException {
     private Integer statusCode;
     private String message;
 
