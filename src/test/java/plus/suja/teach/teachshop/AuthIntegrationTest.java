@@ -21,9 +21,7 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         // 注册用户
         HttpResponse<String> response;
         String body = "username=aaaa&password=wssaadd";
-
         response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
-
         assertEquals(401, response.statusCode());
         assertEquals("{\"message\":\"用户名必须6-20之间\"}", response.body());
 
@@ -34,17 +32,13 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
     public void illegalUserForbidLogin() throws IOException, InterruptedException {
         HttpResponse<String> response;
         String body = "username=wusong&password=wwssaadd";
-
         response = post("/members", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
-
         assertEquals(401, response.statusCode());
         assertTrue(response.body().contains("用户不存在"));
 
         //注册用户
         body = "username=wusong&password=wwssaadd";
-
         response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
-
         assertEquals(201, response.statusCode());
 
         //尝试登录
@@ -90,5 +84,18 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         //确定该用户已经登出
         response = get("/members/online", cookie);
         assertEquals(401, response.statusCode());
+    }
+
+    @Test
+    public void getErrorIfUsernameAlreadyRegistered() throws IOException, InterruptedException {
+        //注册一个用户
+        HttpResponse<String> response;
+        String body = "username=wusong&password=wwssaadd";
+        response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        assertEquals(201, response.statusCode());
+        //再注册相同用户
+        body = "username=wusong&password=wwssaadd";
+        response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        assertEquals(409, response.statusCode());
     }
 }

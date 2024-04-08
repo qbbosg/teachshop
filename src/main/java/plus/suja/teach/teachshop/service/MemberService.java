@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.dao.MemberRepository;
 import plus.suja.teach.teachshop.dao.SessionDao;
@@ -55,8 +56,10 @@ public class MemberService {
         member.setEncryptPassword(BCrypt.withDefaults().hashToString(12, password.toCharArray()));
         try {
             memberRepository.save(member);
+        } catch (DataIntegrityViolationException e) {
+            throw new HttpException(409, "用户名已经存在");
         } catch (Exception e) {
-            throw new HttpException(400, "用户名已经存在");
+            throw new RuntimeException();
         }
         response.setStatus(201);
         return member;
