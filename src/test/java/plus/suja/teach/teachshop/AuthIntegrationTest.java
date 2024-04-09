@@ -98,4 +98,23 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
         assertEquals(409, response.statusCode());
     }
+
+    @Test
+    public void allowAdminVisitAllMember() throws IOException, InterruptedException {
+        HttpResponse<String> response = get("/members", ADMIN_SESSION);
+        assertEquals(200, response.statusCode());
+    }
+
+    @Test
+    public void nonAllowNotAdminVisitAllMember() throws IOException, InterruptedException {
+        HttpResponse<String> response = get("/members", STUDENT_SESSION);
+        assertEquals(403, response.statusCode());
+    }
+
+    @Test
+    public void teacherVisitStudentInfo() throws IOException, InterruptedException {
+        HttpResponse<String> response = get("/members/students/1", TEACHER_SESSION);
+        assertEquals(200, response.statusCode());
+    }
+
 }

@@ -18,8 +18,13 @@ insert into permission (name, role_id) values ( 'mod_user', 4 );
 insert into permission (name, role_id) values ( 'upload', 4 );
 insert into permission (name, role_id) values ( 'mod_admin', 4 );
 
-insert into member_role (member_id, role_id) values ( 1, 1 );
+insert into member_role (member_id, role_id) values ( 1, 0 );
 insert into member_role (member_id, role_id) values ( 2, 1 );
 insert into member_role (member_id, role_id) values ( 3, 2 );
 insert into member_role (member_id, role_id) values ( 4, 3 );
 insert into member_role (member_id, role_id) values ( 5, 4 );
+
+insert into session (member_id, cookie) values ( 1,  'student1');
+insert into session (member_id, cookie) values ( 3,  'teacher');
+insert into session (member_id, cookie) values ( 4,  'admin');
+insert into session (member_id, cookie) values ( 5,  'root');

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,8 +23,8 @@ public class MemberController {
     private MemberService memberService;
 
     @GetMapping
-    public String getAllMembers() {
-        return memberService.all();
+    public String getAllMembers(HttpServletResponse response) {
+        return memberService.all(response);
     }
 
     @PostMapping
@@ -56,5 +57,10 @@ public class MemberController {
     @GetMapping("/offline")
     public void offline(HttpServletRequest request, HttpServletResponse response) {
         memberService.offline(request, response);
+    }
+
+    @GetMapping("/students/{id}")
+    public Member getAllStudents(@PathVariable("id") Integer id, HttpServletResponse response) {
+        return memberService.studentInfo(id, response);
     }
 }

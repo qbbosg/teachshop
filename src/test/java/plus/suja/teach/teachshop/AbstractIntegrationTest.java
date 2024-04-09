@@ -20,11 +20,16 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import static plus.suja.teach.teachshop.config.HttpInterceptor.SESSION_ID;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TeachShopApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"spring.config.location=classpath:test.properties"})
 public class AbstractIntegrationTest {
+    public static final String SUPER_ADMIN_SESSION = SESSION_ID + "=super_admin";
+    public static final String ADMIN_SESSION = SESSION_ID + "=admin";
+    public static final String TEACHER_SESSION = SESSION_ID + "=teacher";
+    public static final String STUDENT_SESSION = SESSION_ID + "=student1";
     @Autowired
     Environment environment;
     @Value("${spring.datasource.url}")
