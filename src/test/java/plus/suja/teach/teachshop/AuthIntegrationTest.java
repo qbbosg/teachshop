@@ -1,18 +1,18 @@
 package plus.suja.teach.teachshop;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import plus.suja.teach.teachshop.entity.Member;
 import plus.suja.teach.teachshop.entity.Session;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static plus.suja.teach.teachshop.config.HttpInterceptor.SESSION_ID;
 
 public class AuthIntegrationTest extends AbstractIntegrationTest {
@@ -21,7 +21,7 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         // 注册用户
         HttpResponse<String> response;
         String body = "username=aaaa&password=wssaadd";
-        response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
         assertEquals(401, response.statusCode());
         assertEquals("{\"message\":\"用户名必须6-20之间\"}", response.body());
 
@@ -32,19 +32,19 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
     public void illegalUserForbidLogin() throws IOException, InterruptedException {
         HttpResponse<String> response;
         String body = "username=wusong&password=wwssaadd";
-        response = post("/members", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
         assertEquals(401, response.statusCode());
         assertTrue(response.body().contains("用户不存在"));
 
         //注册用户
         body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
         assertEquals(201, response.statusCode());
 
         //尝试登录
         body = "username=wusong&password=wwssaadds";
 
-        response = post("/members", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
 
         assertEquals(401, response.statusCode());
         assertTrue(response.body().contains("密码错误"));
@@ -55,14 +55,14 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         //注册用户
         HttpResponse<String> response;
         String body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
         Member member = objectMapper.readValue(response.body(), Member.class);
         assertEquals(201, response.statusCode());
         assertEquals("wusong", member.getUsername());
         assertNull(member.getEncryptPassword());
 
         //用该用户进行登录
-        response = post("/members", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
         member = objectMapper.readValue(response.body(), Member.class);
         String cookie = response.headers().firstValue("Set-Cookie").get();
         assertNotNull(cookie);
@@ -91,30 +91,31 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         //注册一个用户
         HttpResponse<String> response;
         String body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
         assertEquals(201, response.statusCode());
         //再注册相同用户
         body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", APPLICATION_JSON_VALUE, APPLICATION_FORM_URLENCODED_VALUE, body);
+        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
         assertEquals(409, response.statusCode());
     }
 
     @Test
     public void allowAdminVisitAllMember() throws IOException, InterruptedException {
-        HttpResponse<String> response = get("/members", ADMIN_SESSION);
-        assertEquals(200, response.statusCode());
+        assertEquals(200, get("/members", ADMIN_SESSION).statusCode());
     }
 
     @Test
     public void nonAllowNotAdminVisitAllMember() throws IOException, InterruptedException {
-        HttpResponse<String> response = get("/members", STUDENT_SESSION);
-        assertEquals(403, response.statusCode());
+        assertEquals(403, get("/members", STUDENT_SESSION).statusCode());
+        assertEquals(403, get("/members", TEACHER_SESSION).statusCode());
     }
 
     @Test
     public void teacherVisitStudentInfo() throws IOException, InterruptedException {
-        HttpResponse<String> response = get("/members/students/1", TEACHER_SESSION);
+        HttpResponse<String> response = get("/members/students/2", TEACHER_SESSION);
+        Member member = objectMapper.readValue(response.body(), Member.class);
         assertEquals(200, response.statusCode());
+        assertTrue("wu".equals(member.getUsername()));
     }
 
 }
