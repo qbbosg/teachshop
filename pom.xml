@@ -1,99 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>plus.suja.teach</groupId>
-	<artifactId>teach-shop</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>teach-shop</name>
-	<description>A online teach shop</description>
-	<properties>
-		<java.version>17</java.version>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>at.favre.lib</groupId>
-			<artifactId>bcrypt</artifactId>
-			<version>0.10.2</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
-		<dependency>
-			<groupId>com.aliyun.oss</groupId>
-			<artifactId>aliyun-sdk-oss</artifactId>
-			<version>3.17.4</version>
-		</dependency>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>plus.suja.teach</groupId>
+    <artifactId>teach-shop</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>teach-shop</name>
+    <description>A online teach shop</description>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>at.favre.lib</groupId>
+            <artifactId>bcrypt</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.17.4</version>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<version>5.10.2</version> <!-- can be omitted when using the BOM -->
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-			<version>8.5.13</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.10.2</version> <!-- can be omitted when using the BOM -->
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>8.5.13</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.1.2</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.1.2</version>
-			</plugin>
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<version>8.2.0</version>
-				<configuration>
-					<url>jdbc:postgresql://192.168.31.184:5431/shop</url>
-					<user>postgres</user>
-					<password>postgres</password>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>8.2.0</version>
+                <configuration>
+                    <url>jdbc:postgresql://192.168.31.184:5431/shop</url>
+                    <user>postgres</user>
+                    <password>postgres</password>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
