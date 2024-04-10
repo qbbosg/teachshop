@@ -13,7 +13,6 @@ import plus.suja.teach.teachshop.annotation.Teacher;
 import plus.suja.teach.teachshop.dao.MemberRepository;
 import plus.suja.teach.teachshop.dao.SessionDao;
 import plus.suja.teach.teachshop.entity.Member;
-import plus.suja.teach.teachshop.entity.Permission;
 import plus.suja.teach.teachshop.entity.Role;
 import plus.suja.teach.teachshop.entity.Session;
 import plus.suja.teach.teachshop.exception.HttpException;
@@ -62,6 +61,7 @@ public class MemberService {
         } catch (DataIntegrityViolationException e) {
             throw new HttpException(409, "用户名已经存在");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException();
         }
         response.setStatus(201);
@@ -75,8 +75,8 @@ public class MemberService {
             System.out.println(member.getUsername());
             System.out.print("身份：");
             System.out.println(member.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
-            System.out.print("权限：");
-            member.getRoles().forEach(role -> System.out.println(role.getPermissions().stream().map(Permission::getName).collect(Collectors.toList())));
+//            System.out.print("权限：");
+//            member.getRoles().forEach(role -> System.out.println(role.getPermissions().stream().map(Permission::getName).collect(Collectors.toList())));
             System.out.println("--------------");
         });
         response.setStatus(200);
