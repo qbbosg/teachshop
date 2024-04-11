@@ -3,17 +3,20 @@ package plus.suja.teach.teachshop.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.Member;
 import plus.suja.teach.teachshop.entity.Session;
-import plus.suja.teach.teachshop.exception.HttpException;
+import plus.suja.teach.teachshop.entity.Status;
 import plus.suja.teach.teachshop.service.MemberService;
+
+import java.util.List;
 
 
 @RestController
@@ -29,25 +32,16 @@ public class MemberController {
 
     @PostMapping
     public Member getMember(@RequestParam String username, @RequestParam String password, HttpServletResponse response) {
-        if (!StringUtils.hasLength(username) || username.length() < 6 || username.length() > 20) {
-            throw new HttpException(401, "用户名必须6-20之间");
-        }
-        if (!StringUtils.hasLength(password) || password.length() < 6 || password.length() > 20) {
-            throw new HttpException(401, "密码必须6-20之间");
-        }
+        memberService.checkoutUsernameAndPasswordForm(username, password);
         return memberService.login(username, password, response);
     }
 
     @PostMapping("/register")
     public Member createMember(@RequestParam String username, @RequestParam String password, HttpServletResponse response) {
-        if (!StringUtils.hasLength(username) || username.length() < 6 || username.length() > 20) {
-            throw new HttpException(401, "用户名必须6-20之间");
-        }
-        if (!StringUtils.hasLength(password) || password.length() < 6 || password.length() > 20) {
-            throw new HttpException(401, "密码必须6-20之间");
-        }
+        memberService.checkoutUsernameAndPasswordForm(username, password);
         return memberService.register(username, password, response);
     }
+
 
     @GetMapping("/online")
     public Session online(HttpServletResponse response) {
@@ -59,8 +53,46 @@ public class MemberController {
         memberService.offline(request, response);
     }
 
+    @GetMapping("/{id}")
+    public Member getMember(@PathVariable Integer id) {
+        return memberService.getMemberById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteMember(@PathVariable Integer id) {
+        return memberService.deleteMember(id);
+    }
+
+    @GetMapping("/students")
+    public List<Member> getStudents() {
+        return memberService.students();
+    }
+
+    @PostMapping("/students")
+    public Member createStudent(@RequestParam String username, @RequestParam String password, HttpServletResponse response) {
+        memberService.checkoutUsernameAndPasswordForm(username, password);
+        return memberService.createStudent(username, password, response);
+    }
+
     @GetMapping("/students/{id}")
-    public Member getAllStudents(@PathVariable("id") Integer id, HttpServletResponse response) {
-        return memberService.studentInfo(id, response);
+    public Member getStudent(@PathVariable("id") Integer id) {
+        return memberService.getStudent(id);
+    }
+
+    @PutMapping("/students/{id}")
+    public Member modStudent(@PathVariable Integer id,
+                             @RequestParam String username,
+                             @RequestParam Status status) {
+        return memberService.modStudent(id, username, status);
+    }
+
+    @DeleteMapping("/students/{id}")
+    public String deleteStudent(@PathVariable Integer id) {
+        return memberService.deleteStudent(id);
+    }
+
+    @DeleteMapping("/clear/{id}")
+    public String clearDeletedMember(@PathVariable Integer id) {
+        return memberService.clearDeletedMember(id);
     }
 }
