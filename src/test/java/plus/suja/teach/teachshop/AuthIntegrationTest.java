@@ -17,7 +17,7 @@ import static plus.suja.teach.teachshop.config.HttpInterceptor.SESSION_ID;
 
 public class AuthIntegrationTest extends AbstractIntegrationTest {
     @Test
-    public void registerInfoNotFollowRequire() throws IOException, InterruptedException {
+    public void registerNotFollowRequire() throws IOException, InterruptedException {
         // 注册用户
         HttpResponse<String> response;
         String body = "username=aaaa&password=wssaadd";
@@ -32,19 +32,19 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
     public void illegalUserForbidLogin() throws IOException, InterruptedException {
         HttpResponse<String> response;
         String body = "username=wusong&password=wwssaadd";
-        response = post("/members", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
+        response = post("/members", getRequestFromHeads(), body);
         assertEquals(401, response.statusCode());
         assertTrue(response.body().contains("用户不存在"));
 
         //注册用户
         body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
+        response = post("/members/register", getRequestFromHeads(), body);
         assertEquals(201, response.statusCode());
 
         //尝试登录
         body = "username=wusong&password=wwssaadds";
 
-        response = post("/members", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
+        response = post("/members", getRequestFromHeads(), body);
 
         assertEquals(401, response.statusCode());
         assertTrue(response.body().contains("密码错误"));
@@ -55,14 +55,14 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         //注册用户
         HttpResponse<String> response;
         String body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
+        response = post("/members/register", getRequestFromHeads(), body);
         Member member = objectMapper.readValue(response.body(), Member.class);
         assertEquals(201, response.statusCode());
         assertEquals("wusong", member.getUsername());
         assertNull(member.getEncryptPassword());
 
         //用该用户进行登录
-        response = post("/members", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
+        response = post("/members", getRequestFromHeads(), body);
         member = objectMapper.readValue(response.body(), Member.class);
         String cookie = response.headers().firstValue("Set-Cookie").get();
         assertNotNull(cookie);
@@ -91,11 +91,11 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         //注册一个用户
         HttpResponse<String> response;
         String body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
+        response = post("/members/register", getRequestFromHeads(), body);
         assertEquals(201, response.statusCode());
         //再注册相同用户
         body = "username=wusong&password=wwssaadd";
-        response = post("/members/register", Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE), body);
+        response = post("/members/register", getRequestFromHeads(), body);
         assertEquals(409, response.statusCode());
     }
 
@@ -111,11 +111,14 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void teacherVisitStudentInfo() throws IOException, InterruptedException {
-        HttpResponse<String> response = get("/members/students/2", TEACHER_SESSION);
-        Member member = objectMapper.readValue(response.body(), Member.class);
-        assertEquals(200, response.statusCode());
-        assertTrue("wu".equals(member.getUsername()));
+    public void clearDeletedMember() throws IOException, InterruptedException {
+        assertEquals(403, delete("/members/1", TEACHER_SESSION).statusCode());
+        assertEquals(403, delete("/members/clear/1", TEACHER_SESSION).statusCode());
+        assertEquals(200, delete("/members/1", ADMIN_SESSION).statusCode());
+        assertEquals(200, delete("/members/clear/1", ADMIN_SESSION).statusCode());
+        assertEquals(404, get("/members/1", ADMIN_SESSION).statusCode());
+
     }
+
 
 }

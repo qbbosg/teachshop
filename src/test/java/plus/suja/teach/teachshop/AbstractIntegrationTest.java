@@ -53,6 +53,10 @@ public abstract class AbstractIntegrationTest {
         return environment.getProperty("local.server.port");
     }
 
+    public Map<String, String> getRequestFromHeads() {
+        return Map.of("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    }
+
     @BeforeEach
     public void resetDatabase() {
         ClassicConfiguration conf = new ClassicConfiguration();
@@ -90,8 +94,12 @@ public abstract class AbstractIntegrationTest {
         return request("PUT", path, Map.of("Cookie", cookie), body);
     }
 
-    HttpResponse<String> delete(String path, String cookie, String body) throws IOException, InterruptedException {
-        return request("DELETE", path, Map.of("Cookie", cookie), body);
+    HttpResponse<String> put(String path, String cookie, String contentType, String body) throws IOException, InterruptedException {
+        return request("PUT", path, Map.of("Cookie", cookie, "Content-Type", contentType), body);
+    }
+
+    HttpResponse<String> delete(String path, String cookie) throws IOException, InterruptedException {
+        return request("DELETE", path, Map.of("Cookie", cookie), "");
     }
 
 
