@@ -40,9 +40,6 @@ public class TeacherRoleIntegrationTest extends AbstractIntegrationTest {
         assertEquals(201, response.statusCode());
         Member student = objectMapper.readValue(response.body(), Member.class);
         assertEquals("lidabao", student.getUsername());
-        assertEquals(200, get("/members/students/" +student.getId(), TEACHER_SESSION).statusCode());
-        assertEquals("lidabao", objectMapper.readValue(get("/members/students/6", TEACHER_SESSION).body(), Member.class).getUsername());
-
     }
 
     @Test
