@@ -31,14 +31,15 @@ public class TeacherRoleIntegrationTest extends AbstractIntegrationTest {
                 MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                 STUDENT_SESSION,
                 body).statusCode());
-        assertEquals(201, post("/members/students",
+        HttpResponse<String> response = post("/members/students",
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                 TEACHER_SESSION,
-                body).statusCode());
-        assertEquals(200, get("/members/students/6", TEACHER_SESSION).statusCode());
-        assertEquals("lidabao", objectMapper.readValue(get("/members/students/6", TEACHER_SESSION).body(), Member.class).getUsername());
+                body);
 
+        assertEquals(201, response.statusCode());
+        Member student = objectMapper.readValue(response.body(), Member.class);
+        assertEquals("lidabao", student.getUsername());
     }
 
     @Test
