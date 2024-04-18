@@ -59,4 +59,9 @@ public class OrderController {
     public Order closeOrder(@RequestParam("orderNo") String orderNo) throws AlipayApiException, JsonProcessingException {
         return orderService.closeOrder(orderNo);
     }
+
+    @GetMapping("/orders/refund")
+    public String refundOrder(@RequestParam("orderNo") String orderNo) throws AlipayApiException, JsonProcessingException {
+        return orderService.refundOrder(orderNo);
+    }
 }

@@ -4,6 +4,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,28 +12,35 @@ import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.dao.OrderRepository;
 import plus.suja.teach.teachshop.entity.BizContent;
 import plus.suja.teach.teachshop.entity.Course;
+import plus.suja.teach.teachshop.entity.Goods;
 import plus.suja.teach.teachshop.entity.Member;
 import plus.suja.teach.teachshop.entity.Order;
+import plus.suja.teach.teachshop.entity.Video;
 import plus.suja.teach.teachshop.enums.AliPayTradeStatus;
 import plus.suja.teach.teachshop.enums.OrderStatus;
 import plus.suja.teach.teachshop.exception.HttpException;
 import plus.suja.teach.teachshop.util.UserContextUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
     private OrderRepository orderRepository;
     private CourseService courseService;
     private PayService payService;
+    private VideoService videoService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, CourseService courseService, PayService payService) {
+    public OrderService(OrderRepository orderRepository, CourseService courseService, PayService payService, VideoService videoService) {
         this.orderRepository = orderRepository;
         this.courseService = courseService;
         this.payService = payService;
+        this.videoService = videoService;
     }
 
     public List<Order> getAllOrder() {
@@ -91,11 +99,21 @@ public class OrderService {
 
     private BizContent getBizContent(Order order) {
         Course course = courseService.getCourse(order.getCourseId());
-
+        List<Video> videoList = videoService.getAllVideosByCourseId(order.getCourseId()).stream().filter(Video::canPlay).collect(Collectors.toList());
         BizContent bizContent = new BizContent();
+        Integer timeExpireSeconds = 60 * 3;
+        videoList.forEach(video -> {
+            Goods goods = new Goods();
+            goods.setGoodsId(video.getId().toString());
+            goods.setGoodsName(video.getTitle());
+            goods.setPrice(video.getPrice().divide(new BigDecimal(100)));
+            goods.setQuantity(1);
+            bizContent.setGoodsDetails(goods);
+        });
         bizContent.setOutTradeNo(order.getTradeNo());
         bizContent.setTotalAmount(order.getPrice().divide(new BigDecimal(100)));
         bizContent.setSubject(course.getTitle());
+        bizContent.setTimeExpire(LocalDateTime.now().plusSeconds(timeExpireSeconds).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         return bizContent;
     }
 
@@ -107,7 +125,10 @@ public class OrderService {
             setOrderStatusAndSaveOrder(order, AliPayTradeStatus.valueOf(response.getTradeStatus()));
             return order;
         } else {
-            System.out.println("调用失败");
+            if ("40004".equals(response.getCode()) && "ACQ.TRADE_NOT_EXIST".equals(response.getSubCode())) {
+                Order order = getOrderByTradeNo(outTradeNo);
+                setOrderStatusAndSaveOrder(order, AliPayTradeStatus.TRADE_TIMEOUT);
+            }
             throw new HttpException(404, "Not found");
         }
     }
@@ -119,6 +140,12 @@ public class OrderService {
                 break;
             case TRADE_CLOSED:
                 order.setStatus(OrderStatus.DELETED);
+                break;
+            case TRADE_TIMEOUT:
+                order.setStatus(OrderStatus.TIMEOUT);
+                break;
+            case TRADE_REFUND:
+                order.setStatus(OrderStatus.REFUND);
                 break;
             case TRADE_SUCCESS:
             default:
@@ -136,6 +163,17 @@ public class OrderService {
             return order;
         } else {
             throw new HttpException(404, "Not found");
+        }
+    }
+
+    public String refundOrder(String orderNo) throws AlipayApiException, JsonProcessingException {
+        Order order = getOrderByTradeNo(orderNo);
+        AlipayTradeRefundResponse response = payService.alipayTradeRefundRequest(orderNo, order.getPrice());
+        if(response.isSuccess()){
+            setOrderStatusAndSaveOrder(order, AliPayTradeStatus.TRADE_REFUND);
+            return "退款成功";
+        } else {
+            return "退款失败";
         }
     }
 }

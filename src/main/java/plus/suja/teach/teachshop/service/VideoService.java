@@ -9,9 +9,7 @@ import plus.suja.teach.teachshop.entity.Status;
 import plus.suja.teach.teachshop.entity.Video;
 import plus.suja.teach.teachshop.exception.HttpException;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @Service
@@ -25,6 +23,10 @@ public class VideoService {
 
     public List<Video> getAllVideos() {
         return videoRepository.findAll();
+    }
+
+    public List<Video> getAllVideosByCourseId(Integer courseId) {
+        return videoRepository.findAllByCourseId(courseId);
     }
 
     public Video getVideos(Integer id) {

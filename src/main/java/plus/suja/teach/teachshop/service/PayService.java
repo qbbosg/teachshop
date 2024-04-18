@@ -8,9 +8,11 @@ import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -18,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.entity.BizContent;
+import plus.suja.teach.teachshop.entity.pay.Refund;
+
+import java.math.BigDecimal;
 
 @Service
 public class PayService {
@@ -57,7 +62,6 @@ public class PayService {
         //同步跳转地址，仅支持http/https
         request.setReturnUrl("http://localhost:8080/api/v1/orders/checkPay");
         request.setBizContent(objectMapper.writeValueAsString(bizContent));
-        System.out.println(objectMapper.writeValueAsString(bizContent));
         return alipayClient.pageExecute(request, "POST");
     }
 
@@ -73,6 +77,16 @@ public class PayService {
         AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
         BizContent bizContent = new BizContent();
         bizContent.setOutTradeNo(outTradeNo);
+        request.setBizContent(objectMapper.writeValueAsString(bizContent));
+        return alipayClient.execute(request);
+    }
+
+    public AlipayTradeRefundResponse alipayTradeRefundRequest(String outTradeNo, BigDecimal amount) throws JsonProcessingException, AlipayApiException {
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        Refund bizContent = new Refund();
+        bizContent.setOutTradeNo(outTradeNo);
+        bizContent.setRefundAmount(amount.divide(new BigDecimal(100)));
+        bizContent.setRefundReason("我不想要了");
         request.setBizContent(objectMapper.writeValueAsString(bizContent));
         return alipayClient.execute(request);
     }

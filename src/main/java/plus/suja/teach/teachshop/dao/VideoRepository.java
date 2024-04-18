@@ -8,4 +8,6 @@ import java.util.List;
 public interface VideoRepository extends CrudRepository<Video, Integer> {
     @Override
     List<Video> findAll();
+
+    List<Video> findAllByCourseId(Integer courseId);
 }

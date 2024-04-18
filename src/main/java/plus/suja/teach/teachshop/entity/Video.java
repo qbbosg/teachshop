@@ -59,4 +59,8 @@ public class Video extends Base {
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
+
+    public boolean canPlay() {
+        return this.getStatus() == Status.OK;
+    }
 }

@@ -6,7 +6,7 @@ create table course_order
     member_id  int,
     price      int,                                   -- cent unit
     number     int,
-    status     varchar(10) not null default 'UNPAID', -- UNPAID, PAID, DELETED
+    status     varchar(10) not null default 'UNPAID', -- UNPAID, PAID, DELETED, TIMEOUT, REFUND
     created_at timestamp not null default now(),
     updated_at timestamp   not null default now()
 );

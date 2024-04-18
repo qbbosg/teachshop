@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BizContent {
@@ -11,6 +13,8 @@ public class BizContent {
     private BigDecimal totalAmount;
     private String subject;
     private String productCode = "FAST_INSTANT_TRADE_PAY";
+    private List<Goods> goodsDetails = new ArrayList<>();
+    private String timeExpire;
 
     public String getOutTradeNo() {
         return outTradeNo;
@@ -40,5 +44,20 @@ public class BizContent {
         return productCode;
     }
 
+    public List<Goods> getGoodsDetails() {
+        return goodsDetails;
+    }
+
+    public void setGoodsDetails(Goods goods) {
+        this.goodsDetails.add(goods);
+    }
+
+    public String getTimeExpire() {
+        return timeExpire;
+    }
+
+    public void setTimeExpire(String timeExpire) {
+        this.timeExpire = timeExpire;
+    }
 }
 

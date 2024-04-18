@@ -4,7 +4,7 @@ create table course
     title      varchar(200) not null,
     describe   text,
     price      int,                                -- cent unit
-    status      varchar(100) not null default 'OK', -- OK, NO
+    status     varchar(100) not null default 'OK', -- OK, NO
     created_at timestamp    not null default now(),
     updated_at timestamp    not null default now()
 );
@@ -16,7 +16,7 @@ create table video
     link       varchar(200) not null,
     price      int,                                -- cent unit
     course_id  int,
-    status      varchar(100) not null default 'OK', -- OK, NO
+    status     varchar(100) not null default 'OK', -- OK, NO
     created_at timestamp    not null default now(),
     updated_at timestamp    not null default now()
 );
