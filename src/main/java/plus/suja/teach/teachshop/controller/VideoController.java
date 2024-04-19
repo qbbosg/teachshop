@@ -7,15 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.entity.Video;
-import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.service.VideoService;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -40,23 +38,14 @@ public class VideoController {
     }
 
     @PostMapping("/videos")
-    public Video createVideos(@RequestParam String title,
-                              @RequestParam String describe,
-                              @RequestParam String link,
-                              @RequestParam BigDecimal price,
-                              @RequestParam Integer courseId,
+    public Video createVideos(@RequestBody Video video,
                               HttpServletResponse response) {
-        return videoService.createVideos(title, describe, link, price, courseId, response);
+        return videoService.createVideos(video, response);
     }
 
     @PutMapping("/videos/{id}")
-    public Video modifyVideos(@PathVariable Integer id,
-                              @RequestParam String title,
-                              @RequestParam String describe,
-                              @RequestParam String link,
-                              @RequestParam BigDecimal price,
-                              @RequestParam Status status) {
-        return videoService.modifyVideos(id, title, describe, link, price, status);
+    public void modifyVideos(@PathVariable Integer id, @RequestBody Video video) {
+        videoService.modifyVideos(id, video);
     }
 
     @DeleteMapping("/videos/{id}")

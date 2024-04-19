@@ -7,15 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.Course;
 import plus.suja.teach.teachshop.entity.PageResponse;
-import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.service.CourseService;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -40,21 +38,13 @@ public class CourseController {
     }
 
     @PostMapping("/course")
-    public Course createCourse(@RequestParam String title,
-                               @RequestParam String describe,
-                               @RequestParam BigDecimal price,
-                               HttpServletResponse response) {
-        return courseService.createCourse(title, describe, price, response);
+    public Course createCourse(@RequestBody Course course, HttpServletResponse response) {
+        return courseService.createCourse(course, response);
     }
 
     @PutMapping("/course/{id}")
-    public Course modifyCourse(@PathVariable Integer id,
-                               @RequestParam String title,
-                               @RequestParam String describe,
-                               @RequestParam BigDecimal price,
-                               @RequestParam Status status) {
-        return courseService.modifyCourse(id, title, describe, price, status);
-
+    public void modifyCourse(@PathVariable Integer id, @RequestBody Course course) {
+        courseService.modifyCourse(id, course);
     }
 
     @DeleteMapping("/course/{id}")

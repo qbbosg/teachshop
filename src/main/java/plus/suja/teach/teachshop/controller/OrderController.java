@@ -4,9 +4,12 @@ import com.alipay.api.AlipayApiException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +17,6 @@ import plus.suja.teach.teachshop.entity.Order;
 import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.service.OrderService;
 import plus.suja.teach.teachshop.service.PayOrderService;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -42,12 +43,18 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public Order createOrder(@RequestParam Integer courseId,
-                             @RequestParam Integer memberId,
-                             @RequestParam Integer number,
-                             @RequestParam BigDecimal price,
+    public Order createOrder(@RequestBody Order order,
                              HttpServletResponse response) {
-        return orderService.createOrder(courseId, memberId, price, number, response);
+        return orderService.createOrder(order, response);
+    }
+
+    @PutMapping("/orders/{id}")
+    public void modifyOrder(@PathVariable Integer id, @RequestBody Order order) {
+        orderService.modifyOrder(id, order);
+    }
+    @DeleteMapping("/orders/{id}")
+    public void DeleteOrder(@PathVariable Integer id) {
+        orderService.deleteOrder(id);
     }
 
     @GetMapping("/orders/pay")

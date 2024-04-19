@@ -2,7 +2,6 @@ package plus.suja.teach.teachshop;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.entity.Video;
 import plus.suja.teach.teachshop.enums.Status;
@@ -38,22 +37,18 @@ public class VideoTest extends AbstractIntegrationTest {
 
     @Test
     public void createVideo() throws IOException, InterruptedException {
-        String body = "title=Python&describe=Happy learn python&link=/video/python_1.mp4&price=1000&courseId=1";
-        HttpResponse<String> response = post("/videos",
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-                TEACHER_SESSION,
-                body);
+        String body = "{\"status\":\"OK\",\"title\":\"Java high\",\"describe\":\"for begion start java.\",\"link\":\"/videos/high.mp4\",\"price\":10000,\"courseId\":1}";
+        HttpResponse<String> response = post("/videos", TEACHER_SESSION, body);
         assertEquals(201, response.statusCode());
     }
 
     @Test
     public void modifyVideo() throws IOException, InterruptedException {
-        String body = "title=Python&describe=Happy learn python&link=/video/python_1.mp4&price=1000&status=NO";
-        HttpResponse<String> response = put("/videos/1", TEACHER_SESSION, MediaType.APPLICATION_FORM_URLENCODED_VALUE, body);
+        String body = "{\"id\":1,\"status\":\"NO\",\"title\":\"Java base\",\"describe\":\"for begion start java.\",\"link\":\"/videos/start.mp4\",\"price\":10000,\"courseId\":1}";
+        HttpResponse<String> response = put("/videos/1", TEACHER_SESSION, body);
         assertEquals(200, response.statusCode());
     }
-    
+
     @Test
     public void deleteVideo() throws IOException, InterruptedException {
         HttpResponse<String> response = delete("/videos/1", TEACHER_SESSION);

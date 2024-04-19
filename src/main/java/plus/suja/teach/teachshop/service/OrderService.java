@@ -9,7 +9,6 @@ import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.enums.OrderStatus;
 import plus.suja.teach.teachshop.exception.HttpException;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Service
@@ -33,21 +32,24 @@ public class OrderService {
         return orderRepository.findByTradeNo(tradeNo).orElseThrow(() -> new HttpException(404, "Not found"));
     }
 
-    public Order createOrder(Integer courseId, Integer memberId, BigDecimal price, Integer number, HttpServletResponse response) {
-        Order order = new Order();
+    public Order createOrder(Order order, HttpServletResponse response) {
         order.setTradeNo(UUID.randomUUID().toString());
-        order.setStatus(OrderStatus.UNPAID);
-        order.setCourseId(courseId);
-        order.setMemberId(memberId);
-        order.setNumber(number);
-        order.setPrice(price);
-        Order saveOrder;
-        try {
-            saveOrder = orderRepository.save(order);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
+        Order saveOrder = orderRepository.save(order);
         response.setStatus(201);
         return saveOrder;
+    }
+
+    public void modifyOrder(Integer id, Order order) {
+        orderRepository.findById(id).ifPresent(hasOrder -> {
+            hasOrder.setStatus(order.getStatus());
+            orderRepository.save(hasOrder);
+        });
+    }
+
+    public void deleteOrder(Integer id) {
+        orderRepository.findById(id).ifPresent(hasOrder -> {
+            hasOrder.setStatus(OrderStatus.DELETED);
+            orderRepository.save(hasOrder);
+        });
     }
 }

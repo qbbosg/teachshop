@@ -2,7 +2,6 @@ package plus.suja.teach.teachshop;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import plus.suja.teach.teachshop.entity.Course;
 import plus.suja.teach.teachshop.entity.PageResponse;
 
@@ -36,15 +35,15 @@ public class CourseTest extends AbstractIntegrationTest {
 
     @Test
     public void createCourse() throws IOException, InterruptedException {
-        String body = "title=python&describe=happy learn python&price=998";
-        HttpResponse<String> response = post("/course", MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE, TEACHER_SESSION, body);
+        String body = "{\"title\":\"python\",\"describe\":\"happy learn python\",\"price\":\"998\"}";
+        HttpResponse<String> response = post("/course", TEACHER_SESSION, body);
         assertEquals(201, response.statusCode());
     }
 
     @Test
     public void modifyCourse() throws IOException, InterruptedException {
-        String body = "title=python&describe=happy learn python&price=998&status=NO";
-        HttpResponse<String> response = put("/course/1", TEACHER_SESSION, MediaType.APPLICATION_FORM_URLENCODED_VALUE, body);
+        String body = "{\"id\":1,\"status\":\"NO\",\"title\":\"Java collection\",\"describe\":\"all java teach videos\",\"price\":99999}";
+        HttpResponse<String> response = put("/course/1", TEACHER_SESSION, body);
         assertEquals(200, response.statusCode());
     }
 
