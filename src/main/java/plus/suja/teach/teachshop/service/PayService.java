@@ -18,12 +18,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.entity.BizContent;
 import plus.suja.teach.teachshop.entity.pay.Refund;
 
 import java.math.BigDecimal;
 
+@Configuration
+@PropertySource("classpath:application.properties")
 @Service
 public class PayService {
 
