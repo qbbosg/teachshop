@@ -13,8 +13,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/permissions")
 public class PermissionCotroller {
-    @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    public PermissionCotroller(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
 
     @PostMapping
     public String createPermission(@RequestBody Map<String, Object> params) {

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import plus.suja.teach.teachshop.entity.Member;
-import plus.suja.teach.teachshop.entity.Status;
+import plus.suja.teach.teachshop.enums.Status;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;

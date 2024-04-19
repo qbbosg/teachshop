@@ -13,8 +13,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/roles")
 public class RoleController {
-    @Autowired
     private RoleService roleService;
+
+    @Autowired
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @PostMapping
     public String createRole(@RequestBody Map<String, Object> params) {
