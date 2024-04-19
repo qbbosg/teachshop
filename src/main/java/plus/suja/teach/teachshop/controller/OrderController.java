@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.Order;
 import plus.suja.teach.teachshop.service.OrderService;
+import plus.suja.teach.teachshop.service.PayOrderService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,10 +21,12 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class OrderController {
     private OrderService orderService;
+    private PayOrderService payOrderService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, PayOrderService payOrderService) {
         this.orderService = orderService;
+        this.payOrderService = payOrderService;
     }
 
     @GetMapping("/orders")
@@ -47,21 +50,21 @@ public class OrderController {
 
     @GetMapping("/orders/pay")
     public String payOrder(@RequestParam("orderNo") String tradeNo) throws AlipayApiException, JsonProcessingException {
-        return orderService.payOrder(tradeNo);
+        return payOrderService.payOrder(tradeNo);
     }
 
     @GetMapping("/orders/checkPay")
     public Order checkPay(@RequestParam("out_trade_no") String outTradeNo) throws AlipayApiException, JsonProcessingException {
-        return orderService.checkPay(outTradeNo);
+        return payOrderService.checkPay(outTradeNo);
     }
 
     @GetMapping("/orders/close")
     public Order closeOrder(@RequestParam("orderNo") String orderNo) throws AlipayApiException, JsonProcessingException {
-        return orderService.closeOrder(orderNo);
+        return payOrderService.closeOrder(orderNo);
     }
 
     @GetMapping("/orders/refund")
     public String refundOrder(@RequestParam("orderNo") String orderNo) throws AlipayApiException, JsonProcessingException {
-        return orderService.refundOrder(orderNo);
+        return payOrderService.refundOrder(orderNo);
     }
 }

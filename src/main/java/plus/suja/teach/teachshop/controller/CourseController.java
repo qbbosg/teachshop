@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.Course;
-import plus.suja.teach.teachshop.entity.Status;
+import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.service.CourseService;
 
 import java.math.BigDecimal;

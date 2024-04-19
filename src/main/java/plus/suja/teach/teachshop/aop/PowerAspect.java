@@ -13,17 +13,20 @@ import plus.suja.teach.teachshop.util.UserContextUtil;
 public class PowerAspect {
     @Around("@annotation(plus.suja.teach.teachshop.annotation.Admin)")
     public Object checkAdmin(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-       return checkPower("admin", proceedingJoinPoint) ;
+        return checkPower("admin", proceedingJoinPoint);
     }
+
     @Around("@annotation(plus.suja.teach.teachshop.annotation.Teacher)")
     public Object checkTeacher(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        return checkPower("teacher", proceedingJoinPoint) ;
+        return checkPower("teacher", proceedingJoinPoint);
     }
+
     @Around("@annotation(plus.suja.teach.teachshop.annotation.SuperAdmin)")
     public Object checkSuperAdmin(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        return checkPower("root", proceedingJoinPoint) ;
+        return checkPower("root", proceedingJoinPoint);
     }
-    private Object checkPower(String roleWords,ProceedingJoinPoint joinPoint) throws Throwable {
+
+    private Object checkPower(String roleWords, ProceedingJoinPoint joinPoint) throws Throwable {
         Member currentUser = UserContextUtil.getCurrentUser();
         if (currentUser == null) {
             throw new HttpException(401, "Unauthorized");
@@ -33,7 +36,4 @@ public class PowerAspect {
             throw new HttpException(403, "没有权限");
         }
     }
-
-
-
 }

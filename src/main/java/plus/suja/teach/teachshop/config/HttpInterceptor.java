@@ -3,22 +3,22 @@ package plus.suja.teach.teachshop.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
-import plus.suja.teach.teachshop.dao.SessionDao;
+import plus.suja.teach.teachshop.dao.SessionRepository;
 import plus.suja.teach.teachshop.entity.Session;
 import plus.suja.teach.teachshop.util.HttpRequestUtil;
 import plus.suja.teach.teachshop.util.UserContextUtil;
 
 public class HttpInterceptor implements HandlerInterceptor {
     public static final String SESSION_ID = "_SESSION_ID";
-    SessionDao sessionDao;
+    SessionRepository sessionRepository;
 
-    public HttpInterceptor(SessionDao sessionDao) {
-        this.sessionDao = sessionDao;
+    public HttpInterceptor(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
     }
 
     private void setCurrentUserIfPresentCookie(HttpServletRequest request) {
         HttpRequestUtil.getCookie(request)
-                .flatMap(sessionDao::findByCookie)
+                .flatMap(sessionRepository::findByCookie)
                 .map(Session::getMember)
                 .ifPresent(UserContextUtil::setCurrentUser);
     }

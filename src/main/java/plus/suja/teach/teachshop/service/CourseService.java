@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.dao.CourseRepository;
 import plus.suja.teach.teachshop.entity.Course;
-import plus.suja.teach.teachshop.entity.Status;
+import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.exception.HttpException;
 
 import java.math.BigDecimal;

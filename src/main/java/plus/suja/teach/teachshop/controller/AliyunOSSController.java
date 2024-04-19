@@ -13,8 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/aliyunoss")
 public class AliyunOSSController {
-    @Autowired
     private AliyunOSSService aliyunOSSService;
+
+    @Autowired
+    public AliyunOSSController(AliyunOSSService aliyunOSSService) {
+        this.aliyunOSSService = aliyunOSSService;
+    }
 
     @GetMapping("/token")
     public AliyunOSSService.Token token() {

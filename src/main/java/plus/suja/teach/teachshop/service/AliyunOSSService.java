@@ -39,11 +39,11 @@ public class AliyunOSSService {
         long expireTimeSeconds = 30;
         long expireEndTimeMillisSeconds = System.currentTimeMillis() + expireTimeSeconds * 1000;
         Date expiration = new Date(expireEndTimeMillisSeconds);
-        PolicyConditions policyConds = new PolicyConditions();
-        policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
-        policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
+        PolicyConditions policyConditions = new PolicyConditions();
+        policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
+        policyConditions.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
 
-        String postPolicy = client.generatePostPolicy(expiration, policyConds);
+        String postPolicy = client.generatePostPolicy(expiration, policyConditions);
         byte[] binaryData = postPolicy.getBytes(StandardCharsets.UTF_8);
         String encodedPolicy = BinaryUtil.toBase64String(binaryData);
         String postSignature = client.calculatePostSignature(postPolicy);

@@ -3,6 +3,7 @@ package plus.suja.teach.teachshop.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import plus.suja.teach.teachshop.enums.Status;
 
 import java.math.BigDecimal;
 

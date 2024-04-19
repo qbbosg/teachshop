@@ -1,4 +1,4 @@
-package plus.suja.teach.teachshop.entity;
+package plus.suja.teach.teachshop.entity.pay;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -8,21 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class BizContent {
-    private String outTradeNo;
+public class BizContent extends BizContentBase {
     private BigDecimal totalAmount;
     private String subject;
     private String productCode = "FAST_INSTANT_TRADE_PAY";
     private List<Goods> goodsDetails = new ArrayList<>();
     private String timeExpire;
-
-    public String getOutTradeNo() {
-        return outTradeNo;
-    }
-
-    public void setOutTradeNo(String outTradeNo) {
-        this.outTradeNo = outTradeNo;
-    }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;

@@ -13,11 +13,11 @@ import plus.suja.teach.teachshop.annotation.Admin;
 import plus.suja.teach.teachshop.annotation.Teacher;
 import plus.suja.teach.teachshop.dao.MemberRepository;
 import plus.suja.teach.teachshop.dao.RoleRepository;
-import plus.suja.teach.teachshop.dao.SessionDao;
+import plus.suja.teach.teachshop.dao.SessionRepository;
 import plus.suja.teach.teachshop.entity.Member;
 import plus.suja.teach.teachshop.entity.Role;
 import plus.suja.teach.teachshop.entity.Session;
-import plus.suja.teach.teachshop.entity.Status;
+import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.exception.HttpException;
 import plus.suja.teach.teachshop.util.HttpRequestUtil;
 import plus.suja.teach.teachshop.util.UserContextUtil;
@@ -31,12 +31,16 @@ import static plus.suja.teach.teachshop.config.HttpInterceptor.SESSION_ID;
 
 @Service
 public class MemberService {
-    @Autowired
-    private SessionDao sessionDao;
-    @Autowired
+    private SessionRepository sessionRepository;
     private MemberRepository memberRepository;
-    @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    public MemberService(SessionRepository sessionRepository, MemberRepository memberRepository, RoleRepository roleRepository) {
+        this.sessionRepository = sessionRepository;
+        this.memberRepository = memberRepository;
+        this.roleRepository = roleRepository;
+    }
 
     public Member login(String username, String password, HttpServletResponse response) {
         Member member = memberRepository.findByUsername(username);
@@ -51,7 +55,7 @@ public class MemberService {
         Session session = new Session();
         session.setMember(member);
         session.setCookie(UUID.randomUUID().toString());
-        sessionDao.save(session);
+        sessionRepository.save(session);
         response.addCookie(new Cookie(SESSION_ID, session.getCookie()));
 
         response.setStatus(200);
@@ -126,7 +130,7 @@ public class MemberService {
 
     @Transactional
     public void offline(HttpServletRequest request, HttpServletResponse response) {
-        HttpRequestUtil.getCookie(request).ifPresent(sessionDao::deleteByCookie);
+        HttpRequestUtil.getCookie(request).ifPresent(sessionRepository::deleteByCookie);
 
         Cookie cookie = new Cookie(SESSION_ID, "");
         cookie.setMaxAge(0);

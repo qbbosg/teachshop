@@ -6,18 +6,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class Refund {
-    private String outTradeNo;
+public class Refund extends BizContentBase {
     private BigDecimal refundAmount;
     private String refundReason;
-
-    public String getOutTradeNo() {
-        return outTradeNo;
-    }
-
-    public void setOutTradeNo(String outTradeNo) {
-        this.outTradeNo = outTradeNo;
-    }
 
     public BigDecimal getRefundAmount() {
         return refundAmount;

@@ -1,4 +1,4 @@
-package plus.suja.teach.teachshop.entity;
+package plus.suja.teach.teachshop.entity.pay;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

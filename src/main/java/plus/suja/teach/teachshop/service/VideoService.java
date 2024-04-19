@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.annotation.Teacher;
 import plus.suja.teach.teachshop.dao.VideoRepository;
-import plus.suja.teach.teachshop.entity.Status;
+import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.entity.Video;
 import plus.suja.teach.teachshop.exception.HttpException;
 
