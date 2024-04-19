@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.dao.OrderRepository;
 import plus.suja.teach.teachshop.entity.Order;
+import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.enums.OrderStatus;
 import plus.suja.teach.teachshop.exception.HttpException;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,8 +21,8 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> getAllOrder() {
-        return orderRepository.findAll();
+    public PageResponse<Order> getAllOrder(Integer pageNum, Integer pageSize) {
+        return new PageResponse<Order>().getAllPageResponse(pageNum, pageSize, orderRepository::findAll);
     }
 
     public Order getOrder(Integer id) {

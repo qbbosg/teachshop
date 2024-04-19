@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.Order;
+import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.service.OrderService;
 import plus.suja.teach.teachshop.service.PayOrderService;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -30,8 +30,10 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public List<Order> getAllOrder() {
-        return orderService.getAllOrder();
+    public PageResponse<Order> getAllOrder(
+            @RequestParam(value = "pageNum", required = false) Integer pageNum,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        return new PageResponse<Order>().checkPageAndFunctionApply(pageNum, pageSize, orderService::getAllOrder);
     }
 
     @GetMapping("/orders/{id}")

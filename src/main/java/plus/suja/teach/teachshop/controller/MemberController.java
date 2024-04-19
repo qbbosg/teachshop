@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import plus.suja.teach.teachshop.entity.Member;
+import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.entity.Session;
 import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.service.MemberService;
+import plus.suja.teach.teachshop.service.SessionService;
 
 import java.util.List;
 
@@ -22,12 +24,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/members")
 public class MemberController {
-    @Autowired
     private MemberService memberService;
+    private SessionService sessionService;
+
+    @Autowired
+    public MemberController(MemberService memberService, SessionService sessionService) {
+        this.memberService = memberService;
+        this.sessionService = sessionService;
+    }
 
     @GetMapping
-    public String getAllMembers(HttpServletResponse response) {
-        return memberService.all(response);
+    public PageResponse<Member> getAllMembers(
+            @RequestParam(value = "pageNum", required = false) Integer pageNum,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        return new PageResponse<Member>().checkPageAndFunctionApply(pageNum, pageSize, memberService::getAllMember);
     }
 
     @PostMapping
@@ -45,12 +55,12 @@ public class MemberController {
 
     @GetMapping("/online")
     public Session online(HttpServletResponse response) {
-        return memberService.online(response);
+        return sessionService.online(response);
     }
 
     @GetMapping("/offline")
     public void offline(HttpServletRequest request, HttpServletResponse response) {
-        memberService.offline(request, response);
+        sessionService.offline(request, response);
     }
 
     @GetMapping("/{id}")
@@ -65,7 +75,7 @@ public class MemberController {
 
     @GetMapping("/students")
     public List<Member> getStudents() {
-        return memberService.students();
+        return memberService.getAllStudents();
     }
 
     @PostMapping("/students")
@@ -83,7 +93,7 @@ public class MemberController {
     public Member modStudent(@PathVariable Integer id,
                              @RequestParam String username,
                              @RequestParam Status status) {
-        return memberService.modStudent(id, username, status);
+        return memberService.modifyStudent(id, username, status);
     }
 
     @DeleteMapping("/students/{id}")

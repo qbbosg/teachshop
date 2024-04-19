@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import plus.suja.teach.teachshop.entity.Course;
+import plus.suja.teach.teachshop.entity.PageResponse;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.http.HttpResponse;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,10 +17,11 @@ public class CourseTest extends AbstractIntegrationTest {
     @Test
     public void getAllCourse() throws IOException, InterruptedException {
         HttpResponse<String> response = get("/course");
-        List<Course> courseList = objectMapper.readValue(response.body(), new TypeReference<>() {
+        PageResponse<Course> page = objectMapper.readValue(response.body(), new TypeReference<>() {
         });
-        assertEquals(1, courseList.size());
-        assertEquals("Java collection", courseList.get(0).getTitle());
+        assertEquals(1, page.getTotalPage());
+        assertEquals(1, page.getData().size());
+        assertEquals("Java collection", page.getData().get(0).getTitle());
     }
 
     @Test

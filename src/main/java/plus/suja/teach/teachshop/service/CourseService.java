@@ -4,12 +4,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plus.suja.teach.teachshop.dao.CourseRepository;
+import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.entity.Course;
 import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.exception.HttpException;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class CourseService {
@@ -20,9 +20,10 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public List<Course> getAllCourse() {
-        return courseRepository.findAll();
+    public PageResponse<Course> getAllCourse(Integer pageNum, Integer pageSize) {
+        return new PageResponse<Course>().getAllPageResponse(pageNum, pageSize, courseRepository::findAll);
     }
+
 
     public Course getCourse(Integer id) {
         return courseRepository.findById(Integer.valueOf(id)).orElseThrow(() -> new HttpException(401, "Not found"));

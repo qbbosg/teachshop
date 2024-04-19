@@ -3,13 +3,13 @@ package plus.suja.teach.teachshop;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import plus.suja.teach.teachshop.enums.Status;
+import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.entity.Video;
+import plus.suja.teach.teachshop.enums.Status;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.http.HttpResponse;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,10 +18,10 @@ public class VideoTest extends AbstractIntegrationTest {
     @Test
     public void getAllVideo() throws IOException, InterruptedException {
         HttpResponse<String> response = get("/videos");
-        List<Video> videoList = objectMapper.readValue(response.body(), new TypeReference<>() {
+        PageResponse<Video> page = objectMapper.readValue(response.body(), new TypeReference<>() {
         });
-        assertEquals(3, videoList.size());
-        assertEquals("Java base", videoList.get(0).getTitle());
+        assertEquals(3, page.getData().size());
+        assertEquals("Java base", page.getData().get(0).getTitle());
     }
 
     @Test

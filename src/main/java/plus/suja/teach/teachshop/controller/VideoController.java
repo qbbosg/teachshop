@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import plus.suja.teach.teachshop.enums.Status;
+import plus.suja.teach.teachshop.entity.PageResponse;
 import plus.suja.teach.teachshop.entity.Video;
+import plus.suja.teach.teachshop.enums.Status;
 import plus.suja.teach.teachshop.service.VideoService;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,8 +28,10 @@ public class VideoController {
     }
 
     @GetMapping("/videos")
-    public List<Video> getAllVideos() {
-        return videoService.getAllVideos();
+    public PageResponse<Video> getAllVideos(
+            @RequestParam(value = "pageNum", required = false) Integer pageNum,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        return new PageResponse<Video>().checkPageAndFunctionApply(pageNum, pageSize, videoService::getAllVideos);
     }
 
     @GetMapping("/videos/{id}")
@@ -49,13 +51,14 @@ public class VideoController {
 
     @PutMapping("/videos/{id}")
     public Video modifyVideos(@PathVariable Integer id,
-                             @RequestParam String title,
-                             @RequestParam String describe,
-                             @RequestParam String link,
-                             @RequestParam BigDecimal price,
-                             @RequestParam Status status) {
+                              @RequestParam String title,
+                              @RequestParam String describe,
+                              @RequestParam String link,
+                              @RequestParam BigDecimal price,
+                              @RequestParam Status status) {
         return videoService.modifyVideos(id, title, describe, link, price, status);
     }
+
     @DeleteMapping("/videos/{id}")
     public void deleteVideos(@PathVariable Integer id) {
         videoService.deleteVideos(id);
